@@ -1,39 +1,55 @@
 import axios from "axios";
-import { LanguageSlug } from "../contexts/AppConfigContext";
+import { OPENAI_API_URL, OPENAI_API_KEY } from '@env';
 
+export default async function getImageDescription(base64Image: string): Promise<string> {
+    if (!OPENAI_API_URL) {
+        throw new Error("URL do ChatGPT não configurada.");
+    }
 
-export default async function getAzureVisionImageDescription(imagem: Buffer, idioma: LanguageSlug): Promise<string> {
-    if (!imagem) throw new Error('Imagem não encontrada');
+    if (!OPENAI_API_KEY) {
+        throw new Error("API Key do ChatGPT não configurada.");
+    }
 
-    const subscriptionKey = 'a823b2509f464696b072577d96bd03e4';
-    const uriBase = 'https://brazilsouth.api.cognitive.microsoft.com/vision/v3.2/describe';
-    const params = {
-        maxCandidates: 1,
-        language: idioma,
-        'model-version': 'latest'
-    };
-
-    const headers = {
-        'Content-Type': 'application/octet-stream',
-        'Ocp-Apim-Subscription-Key': subscriptionKey
+    const body = {
+        "model": "gpt-4o-mini", 
+        "messages": [
+            {
+                "role": "system",
+                "content": "Você é um assistente para deficientes visuais que oferece breves descrições de imagens. Descreva as imagens com uma frase curta. Descreva a imagem diretamente, não comece com 'A imagem mostra...'."
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Descreva esta imagem:"
+                      },
+                      {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": `data:image/jpeg;base64,${base64Image}`
+                        }
+                      }
+                ]
+            }
+        ]
     };
 
     try {
-        const response = await axios.post(uriBase, imagem, {
-            params,
-            headers,
-            responseType: 'json',
-            transformResponse: [(data) => JSON.parse(data)],
-        }
-        );
+        const response = await axios.post(OPENAI_API_URL, body, { 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${OPENAI_API_KEY}`
+            }
+         });
+        const description = response.data.choices[0].message.content;  
 
-        console.log(response);
+        return description;
         
-        const { captions } = response.data.description;
-        return captions[0].text;
-    }
-    catch (error: any) {
+    } catch (error: any) {
         console.log(error.response);
-        throw new Error("Não foi possivel capturar a descrição da imagem");
+        throw new Error("Não foi possível capturar a descrição da imagem.");
     }
+
+
 }

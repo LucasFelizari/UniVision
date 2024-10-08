@@ -6,7 +6,6 @@ import { Idioma } from '../screens/Idioma';
 type AppRoutes = {
     Inicio: undefined;
     Camera: undefined;
-    Idioma: undefined;
 }
 
 export type AppRoutesProps = NativeStackNavigationProp<AppRoutes>
@@ -23,10 +22,6 @@ export function AppRoutes() {
             <Screen
                 name="Camera"
                 component={Camera}
-            />
-            <Screen
-                name="Idioma"
-                component={Idioma}
             />
         </Navigator>
     );

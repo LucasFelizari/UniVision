@@ -1,28 +1,15 @@
 import { extendTheme, HStack, NativeBaseProvider } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Roboto_400Regular, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
-import { Loading } from './src/components/Loading';
 import { Routes } from './src/routes';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
-
-  // return (
-  //   <Text>bataatta</Text>
-  // );
-  
-    return (
-        <NativeBaseProvider theme={theme}>
-          {/* <Text>
-            BAtata doce
-          </Text> */}
-        {fontsLoaded ? <Routes /> : <Loading />}
-          <StatusBar style="auto" />
-        </NativeBaseProvider>
-      );
-    }
-
+  return (
+    <NativeBaseProvider theme={theme}>
+      <Routes />
+      <StatusBar style="auto" />
+    </NativeBaseProvider>
+  );
+}
 
 const theme = extendTheme({
   colors: {
@@ -43,10 +30,6 @@ const theme = extendTheme({
     red: {
       500: '#F75A68'
     }
-  },
-  fonts: {
-    heading: 'Roboto_700Bold',
-    body: 'Roboto_400Regular',
   },
   fontSizes: {
     xs: 12,

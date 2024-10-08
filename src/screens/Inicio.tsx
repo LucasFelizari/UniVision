@@ -1,15 +1,12 @@
-import { Box, Button, Center, Heading, Icon, Image, Spacer, Text, VStack } from "native-base";
+import { Button, Center, Icon, Image, Spacer, VStack } from "native-base";
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { AppRoutesProps } from "../routes/app.routes";
-import { useTranslation } from 'react-i18next';
 const logo = require('../../assets/logo.png');
 const appName = require('../../assets/app-name.png');
 
 export function Inicio() {
     const navigation = useNavigation<AppRoutesProps>();
-
-    const { t, i18n } = useTranslation();
 
     return (
         <Center
@@ -34,21 +31,7 @@ export function Inicio() {
             </VStack>
 
             <Spacer />
-            <VStack width="150px" space={3}>
-                <Button
-                    bg="#1632ca"
-                    borderRadius={8}
-                    onPress={() => navigation.navigate('Idioma')}
-                    py={4}
-                >
-                    <Text
-                        style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}
-                        fontFamily="body"
-                    >
-                        {t('configuracoes')}
-                    </Text>
-                </Button>
-            </VStack>
+
             <VStack width="full" mb={12} mt={10}>
                 <Button
                     borderRadius={20}
@@ -59,8 +42,8 @@ export function Inicio() {
                 >
                     <Icon
                         as={<FontAwesome name="camera-retro" />}
-                        size={12}
-                        m={8}
+                        size={16}
+                        m={16}
                         color="white"
                     />
                 </Button>
